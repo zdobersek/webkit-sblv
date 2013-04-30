@@ -47,14 +47,26 @@ LAYERS = {
     },
 
     "WebCoreModules": {
+        "skipAnalysis": True, # FIXME: Temporary.
         "libraries": ["libWebCoreModules.a"],
         "dependencies": ["WebCore"],
     },
 
     "WebCoreSVG": {
+        "skipAnalysis": True, # FIXME: Temporary.
         "libraries": ["libWebCoreSVG.a"],
         "dependencies": ["WebCore"],
     },
 }
 
-LAYERS_ORDERING = ["Ignored", "SystemDeps", "InTreeDeps", "WTF", "JavaScriptCore", "Platform", "WebCore"]
+LAYERS_ORDERING = [
+    "Ignored",
+    "SystemDeps",
+    "InTreeDeps",
+    "WTF",
+    "JavaScriptCore",
+    "Platform",
+    "WebCore",
+    "WebCoreModules",
+    "WebCoreSVG",
+]
