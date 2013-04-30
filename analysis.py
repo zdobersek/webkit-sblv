@@ -1,4 +1,5 @@
 
+import layers
 import logging
 import subprocess
 import symbols
@@ -13,10 +14,10 @@ class STAnalysis:
         self._reportedUndefinedSymbols = []
 
     def analyzeLayers(self):
-        for layer in symbols.LAYERS:
-            if layer.get("skipAnalysis"):
+        for layer in layers.LAYERS_ORDERING:
+            if layers.LAYERS[layer].get("skipAnalysis"):
                 continue
-            _log.info("Analyzing layer '%s' ..." % layer["name"])
+            _log.info("Analyzing layer '%s' ..." % layer)
             self._analyzeLayer(layer)
             _log.info("... Done.")
 
