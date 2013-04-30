@@ -13,6 +13,7 @@ LIBRARY_PATHS = filter(None, [
 ])
 
 
+SHARED_LIBRARY_REGEX = re.compile(r"(?:.*)\.so(?:\.\d)?$")
 OBJECT_FILE_REGEX = re.compile(r"^(?P<file>.*(?:\.o)):$")
 SYMBOL_REGEX = re.compile(r"^([ 0-9a-f]{16}) (?P<type>\w) (?P<symbol>.+)$")
 
@@ -20,7 +21,7 @@ SYMBOL_REGEX = re.compile(r"^([ 0-9a-f]{16}) (?P<type>\w) (?P<symbol>.+)$")
 class Library:
     def __init__(self, libraryName):
         self.libraryName = libraryName
-        self.isSharedLibrary = libraryName.endswith(".so") or libraryName.endswith(".so.6")
+        self.isSharedLibrary = bool(SHARED_LIBRARY_REGEX.match(libraryName))
         self._libraryPath = self._findLibrary(libraryName)
 
     def _findLibrary(self, libraryName):
