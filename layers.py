@@ -31,10 +31,30 @@ LAYERS = {
         "dependencies": ["SystemDeps", "Ignored"],
     },
 
+    "JavaScriptCore": {
+        "libraries": ["libjavascriptcoregtk-3.0.so"],
+        "dependencies": ["SystemDeps", "Ignored"],
+    },
+
     "Platform": {
         "libraries": ["libPlatform.a", "libPlatformGtk.a", "libWebCorePlatform.a", "libWebCoreGtk.a"],
         "dependencies": ["WTF", "InTreeDeps"],
     },
+
+    "WebCore": {
+        "libraries": ["libWebCore.a"],
+        "dependencies": ["JavaScriptCore", "Platform"],
+    },
+
+    "WebCoreModules": {
+        "libraries": ["libWebCoreModules.a"],
+        "dependencies": ["WebCore"],
+    },
+
+    "WebCoreSVG": {
+        "libraries": ["libWebCoreSVG.a"],
+        "dependencies": ["WebCore"],
+    },
 }
 
-LAYERS_ORDERING = ["Ignored", "SystemDeps", "InTreeDeps", "WTF", "Platform"]
+LAYERS_ORDERING = ["Ignored", "SystemDeps", "InTreeDeps", "WTF", "JavaScriptCore", "Platform", "WebCore"]
