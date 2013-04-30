@@ -19,7 +19,9 @@ class SymbolTable:
 
         layers.LAYERS["Ignored"]["libraries"].append("dummylib")
         self._symbols["_GLOBAL_OFFSET_TABLE_"] = { "definitions": ["dummylib"], "references": [] }
-        self._definitionsPerLibrary["dummylib"] = ["_GLOBAL_OFFSET_TABLE_"]
+        self._symbols["__gmon_start__"] = { "definitions": ["dummylib"], "references": [] }
+        self._symbols["_Jv_RegisterClasses"] = { "definitions": ["dummylib"], "references": [] }
+        self._definitionsPerLibrary["dummylib"] = ["_GLOBAL_OFFSET_TABLE_", "__gmon_start__", "_Jv_RegisterClasses"]
         self._referencesPerLibrary["dummylib"] = []
 
     def _loadSymbolsForLayer(self, layer):
