@@ -23,26 +23,33 @@ class STAnalysis:
 
     def _analyzeLayer(self, layer):
         referencedSymbols = self._symbolTable.symbolsReferencedInLayer(layer)
+        undefinedSymbols = []
         for symbol in referencedSymbols:
-            if not self._symbolTable.symbolDefinedBeforeReferenced(symbol, layer):
-                self._reportUndefinedSymbol(symbol)
+            if symbol not in undefinedSymbols and not self._symbolTable.symbolDefinedBeforeReferenced(symbol, layer):
+                undefinedSymbols.append(symbol)
 
-    def _reportUndefinedSymbol(self, symbol):
-        if symbol in self._reportedUndefinedSymbols:
+        _log.info("%d undefined symbols found." % len(undefinedSymbols))
+        if not undefinedSymbols:
             return
-        self._reportedUndefinedSymbols.append(symbol)
 
-        _log.warning("Undefined symbol `%s`" % self._demangledSymbol(symbol))
-        _log.warning("  mangled: %s" % symbol)
+        outputFileName = "UndefinedSymbols-%s" % layer
+        _log.info("Storing the undefined symbols report into '%s'" % outputFileName)
+        with open(outputFileName, "w") as outputFile:
+            self._reportUndefinedSymbols(undefinedSymbols, outputFile)
 
-        indentedListItemLog = lambda x: _log.warning("    %s" % x)
-        _log.warning("  libraries that define the symbol:")
-        map(indentedListItemLog, set(self._symbolTable.librariesDefiningSymbol(symbol)))
-        _log.warning("  libraries referencing the symbol:")
-        map(indentedListItemLog, set(self._symbolTable.librariesReferencingSymbol(symbol)))
-        _log.warning("  object files that reference the symbol:")
-        map(indentedListItemLog, set(self._symbolTable.objectFilesReferencingSymbol(symbol)))
-        _log.warning("")
+    def _reportUndefinedSymbols(self, undefinedSymbols, outputFile):
+        for symbol in undefinedSymbols:
+            outputFile.write("Undefined symbol `%s`\n" % self._demangledSymbol(symbol))
+            outputFile.write("  mangled: %s\n" % symbol)
+
+            indentedWrite = lambda x: outputFile.write("    %s\n" % x)
+            outputFile.write("  libraries that define the symbol:\n")
+            map(indentedWrite, set(self._symbolTable.librariesDefiningSymbol(symbol)))
+            outputFile.write("  libraries referencing the symbol:\n")
+            map(indentedWrite, set(self._symbolTable.librariesReferencingSymbol(symbol)))
+            outputFile.write("  object files that reference the symbol:\n")
+            map(indentedWrite, set(self._symbolTable.objectFilesReferencingSymbol(symbol)))
+            outputFile.write("\n")
 
     def _demangledSymbol(self, symbol):
         command = ["c++filt", symbol]
