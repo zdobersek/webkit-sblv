@@ -37,25 +37,19 @@ LAYERS = {
     },
 
     "Platform": {
-        "libraries": ["libPlatform.a", "libPlatformGtk.a", "libWebCorePlatform.a", "libWebCoreGtk.a"],
-        "dependencies": ["WTF", "InTreeDeps"],
+        "libraries": ["libPlatform.a", "libPlatformGtk.a"],
+        "dependencies": ["JavaScriptCore", "WTF", "InTreeDeps"],
+    },
+
+    "WebCorePlatform": {
+        "libraries": ["libWebCorePlatform.a", "libWebCoreGtk.a"],
+        "dependencies": ["WTF", "InTreeDeps"]
     },
 
     "WebCore": {
-        "libraries": ["libWebCore.a"],
-        "dependencies": ["JavaScriptCore", "Platform"],
-    },
-
-    "WebCoreModules": {
-        "skipAnalysis": True, # FIXME: Temporary.
-        "libraries": ["libWebCoreModules.a"],
-        "dependencies": ["WebCore"],
-    },
-
-    "WebCoreSVG": {
-        "skipAnalysis": True, # FIXME: Temporary.
-        "libraries": ["libWebCoreSVG.a"],
-        "dependencies": ["WebCore"],
+        "skipAnalysis": True,
+        "libraries": ["libWebCore.a", "libWebCoreModules.a", "libWebCoreSVG.a"],
+        "dependencies": ["JavaScriptCore", "Platform", "WebCorePlatform"],
     },
 }
 
@@ -66,7 +60,6 @@ LAYERS_ORDERING = [
     "WTF",
     "JavaScriptCore",
     "Platform",
+    "WebCorePlatform",
     "WebCore",
-    "WebCoreModules",
-    "WebCoreSVG",
 ]
