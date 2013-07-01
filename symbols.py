@@ -32,6 +32,8 @@ class SymbolTable:
 
     def _loadSymbolsFromLibrary(self, libraryLoader, layer):
         _log.debug("    Loading symbols from library '%s' ..." % libraryLoader.libraryName)
+        _log.debug("        Location: %s" % libraryLoader.libraryPath)
+
         self._storeSymbolsForLayer(libraryLoader.definedSymbols(), True, libraryLoader, layer)
         self._storeSymbolsForLayer(libraryLoader.referencedSymbols(), False, libraryLoader, layer)
 
