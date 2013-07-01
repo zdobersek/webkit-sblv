@@ -23,6 +23,7 @@ class STAnalysis:
 
     def _analyzeLayer(self, layer):
         referencedSymbols = self._symbolTable.symbolsReferencedInLayer(layer)
+        _log.debug("%d symbols referenced in this layer" % len(referencedSymbols))
         undefinedSymbols = []
         for symbol in referencedSymbols:
             if symbol not in undefinedSymbols and not self._symbolTable.symbolDefinedBeforeReferenced(symbol, layer):
