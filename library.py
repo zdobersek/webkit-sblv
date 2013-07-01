@@ -22,7 +22,7 @@ class Library:
     def __init__(self, libraryName):
         self.libraryName = libraryName
         self.isSharedLibrary = bool(SHARED_LIBRARY_REGEX.match(libraryName))
-        self._libraryPath = self._findLibrary(libraryName)
+        self.libraryPath = self._findLibrary(libraryName)
 
     def _findLibrary(self, libraryName):
         potentialPaths = map(lambda x: os.path.join(x, libraryName), LIBRARY_PATHS)
@@ -44,7 +44,7 @@ class Library:
 
     def _gatherNmOutput(self, defined):
         command = ["nm", "--extern-only"] + (["-D"] if self.isSharedLibrary else []) \
-            + (["--defined-only" if defined else "--undefined-only"]) + [self._libraryPath]
+            + (["--defined-only" if defined else "--undefined-only"]) + [self.libraryPath]
         nmProcess = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE, cwd=os.getcwd())
         stdout, _ = nmProcess.communicate()
         return stdout
