@@ -39,6 +39,7 @@ class STAnalysis:
             self._reportUndefinedSymbols(undefinedSymbols, outputFile)
 
     def _reportUndefinedSymbols(self, undefinedSymbols, outputFile):
+        outputFile.write("%d undefined symbols found.\n\n" % len(undefinedSymbols))
         for symbol in undefinedSymbols:
             outputFile.write("Undefined symbol `%s`\n" % self._demangledSymbol(symbol))
             outputFile.write("  mangled: %s\n" % symbol)
