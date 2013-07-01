@@ -85,11 +85,18 @@ class SymbolTable:
         return referencedSymbols
 
     def symbolDefinedBeforeReferenced(self, symbol, referringLayer):
-
         def symbolDefinedInLayer(layer):
             assert layer in layers.LAYERS
-            symbolDefined = any(map(lambda x: symbol in self._definitionsPerLibrary[x], layers.LAYERS[layer]["libraries"]))
-            return symbolDefined or any(map(lambda x: symbolDefinedInLayer(x), layers.LAYERS[layer]["dependencies"]))
+
+            for library in layers.LAYERS[layer]["libraries"]:
+                if symbol in self._definitionsPerLibrary[library]:
+                    return True
+
+            for depLayer in layers.LAYERS[layer]["dependencies"]:
+                if symbolDefinedInLayer(depLayer):
+                    return True
+
+            return False
 
         return symbolDefinedInLayer(referringLayer)
 
